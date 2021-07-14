@@ -55,11 +55,13 @@ function ticker() {
     //描画
     drawdino();// 恐竜の描画
     drawEnemys(); // 敵キャラクターの描画
+    drawScore(); // スコアの描画
 
     // あたり判定
     hitCheck();
 
     // カウンターの更新
+    game.score += 1;
     game.counter = (game.counter + 1) % 1000000;
 }
 
@@ -121,6 +123,11 @@ function drawEnemys() {
     for (const enemy of game.enemys) {
         ctx.drawImage(enemy.image, enemy.x - enemy.width / 2, enemy.y - enemy.height / 2);
     }
+}
+
+function drawScore() {
+    ctx.font = '24px serif';
+    ctx.fillText(`score: ${game.score}`, 0, 30);
 }
 
 function hitCheck() {
