@@ -41,10 +41,10 @@ function ticker() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // 敵キャラクターの生成
-    if(Math.floor(Math.random() * 100) === 0) {
+    if(Math.floor(Math.random() * 100 - game.score % 100) === 0) {
         createCactus();
     }
-    if(Math.floor(Math.random() * 200) === 0) {
+    if(Math.floor(Math.random() * 200 - game.score % 100) === 0) {
         createBird();
     }
 
@@ -133,8 +133,8 @@ function drawScore() {
 function hitCheck() {
     for (const enemy of game.enemys) {
         if (
-            Math.abs(game.dino.x - enemy.x) < game.dino.width / 2 + enemy.width / 2 &&
-            Math.abs(game.dino.y - enemy.y) < game.dino.height / 2 + enemy.height / 2
+            Math.abs(game.dino.x - enemy.x) < game.dino.width * 0.8 / 2 + enemy.width * 0.9 / 2 &&
+            Math.abs(game.dino.y - enemy.y) < game.dino.height * 0.5 / 2 + enemy.height * 0.9 / 2
         ) {
             game.isGameOver = true;
             ctx.font = 'bold 100px serif';
