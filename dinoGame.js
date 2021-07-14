@@ -148,4 +148,7 @@ document.onkeydown = function(e) {
     if(e.key === ' ' && game.dino.moveY === 0) {
         game.dino.moveY = -41;
     }
+    if(e.key === 'Enter' && game.isGameOver === true) {
+        init();
+    }
 };
