@@ -126,8 +126,8 @@ function drawEnemys() {
 function hitCheck() {
     for (const enemy of game.enemys) {
         if (
-            Math.abs(game.dino.x - enemy.x) < game.dino.width / 2 + enemy.width / 2 &&
-            Math.abs(game.dino.y - enemy.y) < game.dino.height / 2 + enemy.height / 2
+            Math.abs(game.dino.x - enemy.x) < game.dino.width * 0.8 / 2 + enemy.width * 0.9 / 2 &&
+            Math.abs(game.dino.y - enemy.y) < game.dino.height * 0.5 / 2 + enemy.height * 0.9 / 2
         ) {
             game.isGameOver = true;
             ctx.font = 'bold 100px serif';
