@@ -56,7 +56,8 @@ function ticker() {
     drawdino();// 恐竜の描画
     drawEnemys(); // 敵キャラクターの描画
 
-    // TODO あたり判定
+    // あたり判定
+    hitCheck();
 
     // カウンターの更新
     game.counter = (game.counter + 1) % 1000000;
@@ -119,6 +120,20 @@ function drawdino() {
 function drawEnemys() {
     for (const enemy of game.enemys) {
         ctx.drawImage(enemy.image, enemy.x - enemy.width / 2, enemy.y - enemy.height / 2);
+    }
+}
+
+function hitCheck() {
+    for (const enemy of game.enemys) {
+        if (
+            Math.abs(game.dino.x - enemy.x) < game.dino.width / 2 + enemy.width / 2 &&
+            Math.abs(game.dino.y - enemy.y) < game.dino.height / 2 + enemy.height / 2
+        ) {
+            game.isGameOver = true;
+            ctx.font = 'bold 100px serif';
+            ctx.fillText(`Game Over!`, 150, 200);
+            clearInterval(game.timer);
+        }
     }
 }
 
