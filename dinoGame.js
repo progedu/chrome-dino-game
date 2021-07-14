@@ -48,7 +48,7 @@ function ticker() {
         createBird();
     }
 
-    // キャクター移動
+    // キャラクター移動
     movedino(); // 恐竜の移動
     moveEnemys(); // 敵キャラクターの移動
 
