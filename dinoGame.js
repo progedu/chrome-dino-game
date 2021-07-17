@@ -48,12 +48,12 @@ function ticker() {
         createBird();
     }
 
-    // キャクター移動
-    movedino(); // 恐竜の移動
+    // キャラクターの移動
+    moveDino(); // 恐竜の移動
     moveEnemys(); // 敵キャラクターの移動
 
     //描画
-    drawdino();// 恐竜の描画
+    drawDino();// 恐竜の描画
     drawEnemys(); // 敵キャラクターの描画
 
     // TODO あたり判定
@@ -96,7 +96,7 @@ function createBird() {
     });
 }
 
-function movedino() {
+function moveDino() {
     game.dino.y += game.dino.moveY;
     if (game.dino.y >= canvas.height - game.dino.height / 2) {
         game.dino.y = canvas.height - game.dino.height / 2;
@@ -110,9 +110,11 @@ function moveEnemys() {
     for (const enemy of game.enemys) {
         enemy.x += enemy.moveX;
     }
+    // 画面の外に出たキャラクターを配列から削除
+    game.enemys = game.enemys.filter(enemy => enemy.x > -enemy.width);
 }
 
-function drawdino() {
+function drawDino() {
     ctx.drawImage(game.image.dino, game.dino.x - game.dino.width / 2, game.dino.y - game.dino.height / 2);
 }
 
