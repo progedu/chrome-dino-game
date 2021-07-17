@@ -43,10 +43,10 @@ function ticker() {
     // TODO 敵キャラクターの生成
 
     // キャクター移動
-    movedino(); // 恐竜の移動
+    moveDino(); // 恐竜の移動
 
     //描画
-    drawdino();// 恐竜の描画
+    drawDino();// 恐竜の描画
 
     // TODO あたり判定
 
@@ -65,7 +65,7 @@ function createDino() {
     }
 }
 
-function movedino() {
+function moveDino() {
     game.dino.y += game.dino.moveY;
     if (game.dino.y >= canvas.height - game.dino.height / 2) {
         game.dino.y = canvas.height - game.dino.height / 2;
@@ -75,7 +75,7 @@ function movedino() {
     }
 }
 
-function drawdino() {
+function drawDino() {
     ctx.drawImage(game.image.dino, game.dino.x - game.dino.width / 2, game.dino.y - game.dino.height / 2);
 }
 
