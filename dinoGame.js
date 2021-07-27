@@ -5,6 +5,7 @@ const imageNames = ['bird', 'cactus', 'dino'];
 // グローバルな game オブジェクト
 const game = {
     counter: 0,
+    backGrounds: [],
     enemys: [],
     image: {},
     isGameOver: true,
@@ -40,6 +41,10 @@ function ticker() {
     // 画面クリア
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    // 背景の作成
+    if (game.counter % 10 === 0) {
+        createBackGround();
+    }
     // 敵キャラクターの生成
     if(Math.floor(Math.random() * (100 - game.score / 100)) === 0) {
         createCactus();
@@ -49,10 +54,12 @@ function ticker() {
     }
 
     // キャクターの移動
+    moveBackGrounds(); // 背景の移動
     moveDino(); // 恐竜の移動
     moveEnemys(); // 敵キャラクターの移動
 
     //描画
+    drawBackGrounds(); // 背景の描画
     drawDino();// 恐竜の描画
     drawEnemys(); // 敵キャラクターの描画
     drawScore(); // スコアの描画
@@ -73,6 +80,19 @@ function createDino() {
         width: game.image.dino.width,
         height: game.image.dino.height,
         image: game.image.dino
+    }
+}
+
+function createBackGround() {
+    game.backGrounds = [];
+    for (let x = 0; x <= canvas.width; x+=200) {
+        game.backGrounds.push({
+            x: x,
+            y: canvas.height,
+            width: 200,
+            height: 30,
+            moveX: -20,
+        });
     }
 }
 
@@ -99,6 +119,12 @@ function createBird() {
     });
 }
 
+function moveBackGrounds() {
+    for (const backGround of game.backGrounds) {
+        backGround.x += backGround.moveX;
+    }
+}
+
 function moveDino() {
     game.dino.y += game.dino.moveY;
     if (game.dino.y >= canvas.height - game.dino.height / 2) {
@@ -117,6 +143,15 @@ function moveEnemys() {
     game.enemys = game.enemys.filter(enemy => enemy.x > -enemy.width);
 }
 
+function drawBackGrounds(){
+    ctx.fillStyle = 'sienna';
+    for (const backGround of game.backGrounds) {
+        ctx.fillRect(backGround.x, backGround.y - 5, backGround.width, 5);
+        ctx.fillRect(backGround.x+20, backGround.y - 10, backGround.width - 40, 5);
+        ctx.fillRect(backGround.x+50, backGround.y - 15, backGround.width - 100, 5);
+    }
+}
+
 function drawDino() {
     ctx.drawImage(game.image.dino, game.dino.x - game.dino.width / 2, game.dino.y - game.dino.height / 2);
 }
@@ -128,6 +163,7 @@ function drawEnemys() {
 }
 
 function drawScore() {
+    ctx.fillStyle = 'black';
     ctx.font = '24px serif';
     ctx.fillText(`score: ${game.score}`, 0, 30);
 }
@@ -139,6 +175,7 @@ function hitCheck() {
             Math.abs(game.dino.y - enemy.y) < game.dino.height * 0.5 / 2 + enemy.height * 0.9 / 2
         ) {
             game.isGameOver = true;
+            ctx.fillStyle = 'black';
             ctx.font = 'bold 100px serif';
             ctx.fillText(`Game Over!`, 150, 200);
             clearInterval(game.timer);
