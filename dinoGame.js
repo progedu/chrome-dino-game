@@ -7,6 +7,7 @@ const game = {
     counter: 0,
     backGrounds: [],
     enemys: [],
+    enemyCountdown: 0,
     image: {},
     isGameOver: true,
     score: 0,
@@ -31,6 +32,7 @@ for (const imageName of imageNames) {
 function init() {
     game.counter    = 0;
     game.enemys     = [];
+    game.enemyCountdown = 0;
     game.isGameOver = false;
     game.score      = 0;
     createDino();
@@ -46,12 +48,7 @@ function ticker() {
         createBackGround();
     }
     // 敵キャラクターの生成
-    if(Math.floor(Math.random() * (100 - game.score / 100)) === 0) {
-        createCactus();
-    }
-    if(Math.floor(Math.random() * (200 - game.score / 100)) === 0) {
-        createBird();
-    }
+    createEnemys();
 
     // キャクターの移動
     moveBackGrounds(); // 背景の移動
@@ -70,6 +67,7 @@ function ticker() {
     // カウンターの更新
     game.score += 1;
     game.counter = (game.counter + 1) % 1000000;
+    game.enemyCountdown -= 1;
 }
 
 function createDino() {
@@ -96,9 +94,9 @@ function createBackGround() {
     }
 }
 
-function createCactus() {
+function createCactus(createX) {
     game.enemys.push({
-        x: canvas.width + game.image.cactus.width / 2,
+        x: createX,
         y: canvas.height - game.image.cactus.height / 2,
         width: game.image.cactus.width,
         height: game.image.cactus.height,
@@ -117,6 +115,25 @@ function createBird() {
         moveX: -15,
         image: game.image.bird
     });
+}
+
+function createEnemys() {
+    if (game.enemyCountdown === 0) {
+        game.enemyCountdown = 60 - Math.floor(game.score / 100);
+        if(game.enemyCountdown <= 30) game.enemyCountdown = 30;
+        switch(Math.floor(Math.random() * 3)) {
+            case 0:
+                createCactus(canvas.width + game.image.cactus.width / 2);
+                break;
+            case 1:
+                createCactus(canvas.width + game.image.cactus.width / 2);
+                createCactus(canvas.width + game.image.cactus.width * 3 / 2);
+                break;
+            case 2:
+                createBird();
+                break;
+        }
+    }
 }
 
 function moveBackGrounds() {
