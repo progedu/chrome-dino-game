@@ -6,13 +6,16 @@ const imageNames = ['bird', 'cactus', 'dino'];
 const game = {
     counter: 0,
     backGrounds: [],
+    bgm1: new Audio('bgm/fieldSong.mp3'),
+    bgm2: new Audio('bgm/jump.mp3'),
     enemys: [],
     enemyCountdown: 0,
     image: {},
-    isGameOver: true,
     score: 0,
+    state: 'loading',
     timer: null
 };
+game.bgm1.loop = true;
 
 // 複数画像読み込み
 let imageLoadCounter = 0;
@@ -33,9 +36,26 @@ function init() {
     game.counter    = 0;
     game.enemys     = [];
     game.enemyCountdown = 0;
-    game.isGameOver = false;
     game.score      = 0;
+    game.state      = 'init';
+    // 画面クリア
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // 恐竜の表示
     createDino();
+    drawDino();
+    // 背景の描画
+    createBackGround();
+    drawBackGrounds();
+    // 文章の表示
+    ctx.fillStyle = 'black';
+    ctx.font = 'bold 60px serif';
+    ctx.fillText(`Press Space key`, 60, 150);
+    ctx.fillText(`to start.`, 150, 230);
+}
+
+function start() {
+    game.state = 'gaming';
+    game.bgm1.play();
     game.timer = setInterval(ticker, 30);
 }
 
@@ -191,7 +211,8 @@ function hitCheck() {
             Math.abs(game.dino.x - enemy.x) < game.dino.width * 0.8 / 2 + enemy.width * 0.9 / 2 &&
             Math.abs(game.dino.y - enemy.y) < game.dino.height * 0.5 / 2 + enemy.height * 0.9 / 2
         ) {
-            game.isGameOver = true;
+            game.state = 'gameover';
+            game.bgm1.pause();
             ctx.fillStyle = 'black';
             ctx.font = 'bold 100px serif';
             ctx.fillText(`Game Over!`, 150, 200);
@@ -201,10 +222,14 @@ function hitCheck() {
 }
 
 document.onkeydown = function(e) {
+    if(e.key === ' ' && game.state === 'init') {
+        start();
+    }
     if(e.key === ' ' && game.dino.moveY === 0) {
         game.dino.moveY = -41;
+        game.bgm2.play();
     }
-    if(e.key === 'Enter' && game.isGameOver === true) {
+    if(e.key === 'Enter' && game.state === 'gameover') {
         init();
     }
 };
